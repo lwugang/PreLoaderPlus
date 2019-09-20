@@ -1,0 +1,54 @@
+apply plugin: 'com.android.application'
+apply plugin: "pre-loader-gradle"
+//apply plugin: com.liwg.preloader.plugin.PreLoaderPlugin
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion '28.0.2'
+    defaultConfig {
+        applicationId "com.billy.preloader"
+        minSdkVersion 14
+        targetSdkVersion 28
+
+        versionCode 1
+        versionName "1.0"
+    }
+    //签名Persona
+    signingConfigs {
+        release {
+            storeFile file("../store.keystore")
+            storePassword "123456"
+            keyAlias "preloader"
+            keyPassword "123456"
+        }
+    }
+    buildTypes {
+        debug {
+            debuggable true
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+        release {
+            debuggable false
+            minifyEnabled false
+            zipAlignEnabled true
+            shrinkResources false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('' +
+                    'proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:28.0.0-rc01'
+    implementation project(':pre-loader')
+    implementation 'io.reactivex:rxjava:1.1.5'
+    implementation 'com.dhh:websocket:2.1.2'
+    //    compile 'com.billy.android:pre-loader:2.1.0'
+
+}
