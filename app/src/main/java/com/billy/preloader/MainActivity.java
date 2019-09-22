@@ -2,28 +2,26 @@ package com.billy.preloader;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.billy.android.preloader.PreLoader;
-import com.billy.android.preloader.interfaces.DataListener;
-import com.billy.android.preloader.interfaces.DataLoader;
-import com.billy.android.preloader.interfaces.GroupedDataLoader;
-import com.dhh.websocket.RxWebSocket;
-import com.dhh.websocket.WebSocketInfo;
-import com.dhh.websocket.WebSocketSubscriber;
+import com.liwg.android.preloader.PreLoader;
+import com.liwg.android.preloader.anno.Subscribe;
+import com.liwg.android.preloader.interfaces.DataListener;
+import com.liwg.android.preloader.interfaces.DataLoader;
+import com.liwg.android.preloader.interfaces.GroupedDataLoader;
 
-import okhttp3.WebSocket;
-import okio.ByteString;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.ParameterizedType;
+
 import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 /**
  * @author billy.qi
@@ -32,7 +30,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private int preLoadBeforeButtonClickId;
     private int id;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,33 +41,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 , R.id.btn_pre_load_before_button_click
                 , R.id.btn_pre_load_group_before_page
         );
-        RxWebSocket.get("ws://192.168.0.89:8000/test_websocket/")
-                .subscribe(new WebSocketSubscriber() {
-                    @Override
-                    public void onOpen(@NonNull WebSocket webSocket) {
-                        Log.e("MainActivity", "onOpen1:");
-                    }
-
-                    @Override
-                    public void onMessage(@NonNull String text) {
-                        Log.e("MainActivity", "返回数据:" + text);
-                    }
-
-                    @Override
-                    public void onMessage(@NonNull ByteString byteString) {
-
-                    }
-
-                    @Override
-                    protected void onReconnect() {
-                        Log.e("MainActivity", "重连:");
-                    }
-
-                    @Override
-                    protected void onClose() {
-                        Log.e("MainActivity", "onClose:");
-                    }
-                });
+        id = PreLoader.create(Observable.create(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+                subscriber.onNext("success");
+                subscriber.onCompleted();
+            }
+        }));
+        getIntent().putExtra("PRELOADER",id);
+        getIntent().putExtra("Test1",id);
+        getIntent().putExtra("Test2",id);
         //start pre-loader for PreLoadBeforeLaunchActivity
 //        preLoadBeforeButtonClickId = preLoadForNextActivity();
 
@@ -83,8 +63,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        }));
     }
 
+    @Subscribe(preloadKey = "Test2")
+    public void test(Observable<String> observable){
+        observable.subscribe(new Action1<String>() {
+            @Override
+            public void call(String s) {
+                Log.e("--------", "call: "+s );
+            }
+        });
+    }
+    @Subscribe(preloadKey = "Test1")
+    public void test2(Observable observable){
+        observable.subscribe(new Action1<String>() {
+            @Override
+            public void call(String s) {
+                Log.e("--------", "call: "+s );
+            }
+        });
+    }
 
-    private void addOnClickListeners(@IdRes int... ids) {
+
+
+    public void addOnClickListeners(@IdRes int... ids) {
         if (ids != null) {
             View view;
             for (int id : ids) {

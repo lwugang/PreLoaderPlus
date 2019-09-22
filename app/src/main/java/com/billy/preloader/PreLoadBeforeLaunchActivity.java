@@ -6,8 +6,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.billy.android.preloader.PreLoader;
-import com.billy.android.preloader.interfaces.DataListener;
+import com.liwg.android.preloader.PreLoader;
+import com.liwg.android.preloader.interfaces.DataListener;
 
 /**
  * pre-load data before launch the activity

@@ -5,10 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
-import com.billy.android.preloader.PreLoader;
-import com.billy.android.preloader.PreLoaderWrapper;
-import com.billy.android.preloader.interfaces.DataListener;
-import com.billy.android.preloader.interfaces.DataLoader;
+import com.liwg.android.preloader.PreLoader;
+import com.liwg.android.preloader.PreLoaderWrapper;
+import com.liwg.android.preloader.interfaces.DataListener;
+import com.liwg.android.preloader.interfaces.DataLoader;
 
 /**
  * pre-load data with PreLoader<br>
