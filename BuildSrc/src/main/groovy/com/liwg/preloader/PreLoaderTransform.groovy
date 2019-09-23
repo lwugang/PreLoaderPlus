@@ -94,10 +94,14 @@ class PreLoaderTransform extends Transform {
                     String filePath = file.absolutePath
                     if (filePath.endsWith(".class") && !filePath.contains('R$')
                             && !filePath.contains('R.class') && !filePath.contains("BuildConfig.class")) {
-                        int index = filePath.indexOf(packageName)
+                        int index = filePath.indexOf(packageName) + project.PreLoader.pkgSuffix.length() + 1
                         int end = filePath.length() - 6 // .class = 6
                         String className = filePath.substring(index, end).replace('\\', '.').replace('/', '.')
-                        CtClass ctClass = mPool.getCtClass(className)
+                        CtClass ctClass = mPool.getOrNull(className)
+                        if (ctClass == null) {
+                            println("不支持的类：" + className)
+                            return
+                        }
                         mPool.importPackage(ctClass.getPackageName())
                         if (!U.verifySubscribe(ctClass))
                             return
@@ -106,12 +110,15 @@ class PreLoaderTransform extends Transform {
                         //遍历类中的所有方法
                         List<InjectLoaderBean> injectLoaderBeanList = new ArrayList<>()
                         for (CtMethod method : ctClass.getDeclaredMethods()) {
-                            Annotation annotation = findSubscribeAnnotaion((Annotation[]) method.getAnnotations())
-                            if (annotation != null) {
-                                def matcher = pattern.matcher(annotation.toString())
-                                String key = matcher.find() ? matcher.group() : PreLoaderPlugin.DEF_EXTRA_KEY
-                                injectLoaderBeanList.add(Generate.generatePreLoaderListenerClass(ctClass, method, key.replaceAll("\"", ""),
-                                        project.PreLoader.resultInterceptClass, path))
+                            try {
+                                Annotation annotation = findSubscribeAnnotaion(method.getAnnotations())
+                                if (annotation != null) {
+                                    def matcher = pattern.matcher(annotation.toString())
+                                    String key = matcher.find() ? matcher.group() : PreLoaderPlugin.DEF_EXTRA_KEY
+                                    injectLoaderBeanList.add(Generate.generatePreLoaderListenerClass(ctClass, method, key.replaceAll("\"", ""),
+                                            project.PreLoader.resultInterceptClass, path))
+                                }
+                            } catch (Throwable e) {
                             }
                         }
                         Generate.createBindActivityOrFragmentCode(ctClass, injectLoaderBeanList, path)
@@ -121,7 +128,7 @@ class PreLoaderTransform extends Transform {
         }
     }
 
-    Annotation findSubscribeAnnotaion(Annotation[] annotations) {
+    Annotation findSubscribeAnnotaion(Object[] annotations) {
         if (annotations == null || annotations.length == 0)
             return null
         for (int i = 0; i < annotations.length; i++) {

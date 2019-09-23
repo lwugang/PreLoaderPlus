@@ -25,7 +25,7 @@ class PreLoaderExtension {
     /**
      * 需要处理的包名前缀，默认是com
      */
-    String pkgSuffix = 'com'
+    String pkgSuffix = 'classes'
     /**
      * 预加载结果拦截处理器，主要针对网络返回结果处理
      */

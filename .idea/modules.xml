@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/BuildSrc/BuildSrc.iml" filepath="$PROJECT_DIR$/BuildSrc/BuildSrc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PreLoaderPlus.iml" filepath="$PROJECT_DIR$/PreLoaderPlus.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pre-loader/pre-loader.iml" filepath="$PROJECT_DIR$/pre-loader/pre-loader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pre-loader-anno/pre-loader-anno.iml" filepath="$PROJECT_DIR$/pre-loader-anno/pre-loader-anno.iml" />
+    </modules>
+  </component>
+</project>

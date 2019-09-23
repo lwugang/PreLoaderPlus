@@ -16,16 +16,11 @@ dependencies {
     compile 'org.javassist:javassist:3.25.0-GA'
 }
 
-/**定义工件的group、name 和 version*/
-group = 'com.liwg.preloader'
-archivesBaseName = 'preloader'
-version = '1.0.0'
-
 uploadArchives {
-    repositories {
-        /**配置Maven部署器，将工件上传到本地目录，这里是放到与该项目同级目录的repo目录下*/
-        mavenDeployer {
-            repository(url: "../../repo")
-        }
+    repositories.mavenDeployer {
+        repository(url: uri('../../repo')) //仓库的路径，此处是项目根目录下的 repo 的文件夹
+        pom.groupId = 'com.liwg.preloader'  //groupId ，自行定义，一般是包名
+        pom.artifactId = 'preloader' //artifactId ，自行定义
+        pom.version = '1.0.0' //version 版本号
     }
 }

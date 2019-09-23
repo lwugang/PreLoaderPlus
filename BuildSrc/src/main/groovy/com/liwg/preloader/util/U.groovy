@@ -39,7 +39,6 @@ class U {
         CtClass appCompatActivityClass = superClass.getClassPool().get("android.support.v7.app.AppCompatActivity")
         CtClass fragmentActivityClass = superClass.getClassPool().get("android.support.v4.app.FragmentActivity")
         while (superClass != activityClass && superClass != fragmentActivityClass && superClass != appCompatActivityClass) {
-            println(superClass.getPackageName())
             if (superClass.getPackageName().startsWith("android.")) {
                 return false
             }
