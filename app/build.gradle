@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 //apply plugin: "pre-loader-gradle"
-apply plugin: com.liwg.preloader.PreLoaderPlugin
+//apply plugin: com.liwg.preloader.PreLoaderPlugin
 android {
     compileSdkVersion 28
     buildToolsVersion '28.0.2'
@@ -31,9 +31,9 @@ android {
     }
 }
 
-PreLoader{
-    resultInterceptClass="com.billy.preloader.ResultIntercept"
-}
+//PreLoader{
+//    resultInterceptClass="com.billy.preloader.ResultIntercept"
+//}
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
